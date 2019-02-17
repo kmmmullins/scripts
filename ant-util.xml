@@ -1,0 +1,86 @@
+<project name="chat" default="deploy" basedir=".">
+
+
+
+<property name="manager.url" value="http://localhost:8080/manager/text" />
+   <property name="manager.username" value="kmullins" />
+   <property name="manager.password" value="T0mpetty" />
+   <property name="context" value="chat" />
+   <property name="war.file" value="/usr/local/tomcat7/wars/rebel-chat-1.2.war" />
+
+
+<path id="catalina-ant-classpath">  
+        <fileset dir="/usr/local/tomcat7/lib">  
+           <include name="catalina-ant.jar"/>  
+           <include name="tomcat-coyote.jar"/>
+           <include name="tomcat-util.jar"/>
+        </fileset>
+    <fileset dir="/usr/local/tomcat7/bin">
+               <include name="tomcat-juli.jar"/>
+    </fileset>
+
+    </path>  
+
+
+ <path id="build.classpath">
+    <fileset dir="/usr/local/ant/lib">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
+
+
+<taskdef name="list" classname="org.apache.catalina.ant.ListTask" classpathref="catalina-ant-classpath"/>
+
+  <target name="list" description="list application" >
+    <list url="${manager.url}" username="${manager.username}" 
+      password="${manager.password}"  />
+  </target>
+
+<taskdef name="start" classname="org.apache.catalina.ant.StartTask" classpathref="catalina-ant-classpath"/>
+
+  <target name="start" description="start application" >
+    <start url="${manager.url}" username="${manager.username}" 
+      password="${manager.password}" 
+                      path="/${context}" />
+  </target>
+
+<taskdef name="stop" classname="org.apache.catalina.ant.StopTask" classpathref="catalina-ant-classpath"/>
+
+  <target name="stop" description="stop application" >
+    <stop url="${manager.url}" username="${manager.username}" 
+      password="${manager.password}" 
+                      path="/${context}" />
+  </target>
+
+<taskdef name="restart" classname="org.apache.catalina.ant.ReloadTask" classpathref="catalina-ant-classpath"/>
+
+  <target name="restart" description="restart application" >
+    <restart url="${manager.url}" username="${manager.username}" 
+      password="${manager.password}" 
+                      path="/${context}" />
+  </target>
+
+<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" classpathref="catalina-ant-classpath"/>
+
+  <target name="deploy" description="deploy application" >
+    <deploy url="${manager.url}" username="${manager.username}" 
+      password="${manager.password}" 
+                      path="/${context}"
+                        war="file:${war.file}"/>
+  </target>
+
+
+<taskdef name="undeploy" classname="org.apache.catalina.ant.DeployTask" classpathref="catalina-ant-classpath"/>
+
+  <target name="undeploy" description="deploy application" >
+    <undeploy url="${manager.url}" username="${manager.username}" 
+      password="${manager.password}" 
+                      path="/${context}" 
+                      failonerror="false"/>
+  </target>
+
+
+
+</project>
+

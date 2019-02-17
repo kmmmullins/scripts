@@ -1,0 +1,114 @@
+#!/bin/bash 
+#
+#  release for idd svn projects  (using svn.mit.edu repository) 
+#
+#
+#
+DATE=`date +%m%d%y%H%M%S`
+DATEFMT="%H:%M:%S %m/%d/%Y"
+LOGFILE=/home/inside/logs/tag-history.log
+HOSTNAME=`hostname`
+APPNAME=$1
+SVNBASE="svn+ssh://svn.mit.edu"
+STATUS_CMD="svn status -u"
+UPDATE_CMD="svn update"
+#export SVN_SSH="ssh -i  /usr/local/etc/was/svn/sais.private -q -l isdasnap"
+SVN_SSH="ssh -i  /home/kmullins/private/sais.private -q -l isdasnap"
+SVNREV=`svn log -l 1 ${SVNBASE}/idd/${APPNAME}  | grep line | awk '{print $1}' `
+
+##########################################################
+#
+#  Check command line
+#
+#########################################################
+
+if [ $# -lt 1 ]
+then
+
+   echo " "
+   echo " ERROR on the command line - no application name specified"
+   echo " "
+   echo " Usage tomcat-tag application-name"
+   echo " "
+   echo " Example: tomcat-tag w2 "
+   echo " "
+   exit
+else
+   echo " "
+fi
+
+
+##########################################################
+#
+#  If Kerb is in place then use it
+#
+#########################################################
+
+KERBSTATUS=`klist 2>/dev/null | grep Default | wc -l`
+
+if [ $KERBSTATUS -lt 1 ]
+
+   then
+       echo  `date +"${DATEFMT}" `   "Username:  "
+       read USERNAME
+
+#       echo  "${DATEFMTLOG}  Username: ${USERNAME} ran release-kmm and authenicated via a non-kerberos id for the $app application" >> $LOGFILE
+       echo "Authenticating to svn with NON-Kerb-id for $USERNAME  for the $app application \n"
+   else
+
+         KERBNAME=`klist 2>/dev/null | grep Default | awk '{print $3}' | awk -F"@" '{print $1}'`
+
+#         echo  "              "
+#         echo "app-deploy deployment of $1 authenticating to svn with Kerb id $KERBNAME for the $app application "
+
+         USERNAME=$KERBNAME
+
+#         echo  "${DATEFMTLOG}  Username: ${USERNAME} app-deploy authenticated via kerberos id for the $app application " >> $LOGFILE
+
+   fi
+
+##########################################################
+#
+#  Create Tags
+#
+#########################################################
+CHECKBRANCH=`echo $APPNAME | grep "/"`
+echo ${CHECKBRANCH}
+
+
+if [[ $? -eq 0 ]]
+then
+   APPN=`echo $APPNAME | sed  's/\//-/g'`
+   export TAGNAME="$APPN-$SVNREV-$DATE"
+   echo ${TAGNAME}
+else
+   export TAGNAME="$APPNAME-$SVNREV-$DATE"
+   echo ${TAGNAME}
+fi
+
+echo "******** Creating Tag  ***********"
+COPY_CMD="svn copy ${SVNBASE}/idd/${APPNAME} ${SVNBASE}/idd/parking/tags/$TAGNAME -m \"new-$APPN-release\""
+echo " Copy command ... ${COPY_CMD} "
+SVN_SSH="ssh -q -l  $USERNAME"  ${COPY_CMD} 
+
+echo " "
+echo "********* list **********"
+
+list_cmd="svn list svn+ssh://svn.mit.edu/idd/parking/tags/"
+SVN_SSH="ssh -q -l  $USERNAME"  ${list_cmd} | grep $TAGNAME
+
+if [ $? -ne 0 ]
+then
+  echo "There is a problem creating tag $TAGNAME"
+  exit
+else
+
+echo " "
+#echo " The Tagname for the ${APPNAME} move to test is ${TAGNAME} "
+echo " "
+#echo "The Tagname for the ${APPNAME} deployment to test is ${TAGNAME} " | mail -s "Created new SVN Tag ${TAGNAME}" kmullins@mit.edu
+exit
+fi
+
+
+

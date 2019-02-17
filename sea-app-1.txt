@@ -1,0 +1,24 @@
+
+Processes in Instance: test_app02.sea-app-1.mit.edu
+-------------------+--------------------+---------+---------
+ias-component      | process-type       |     pid | status  
+-------------------+--------------------+---------+---------
+LogLoader          | logloaderd         |     N/A | Down    
+dcm-daemon         | dcm-daemon         |    7506 | Alive   
+OC4J               | home               |   13743 | Alive   
+OC4J               | ssit-academic      |   13744 | Alive   
+OC4J               | ssit-degree-track~ |   13746 | Alive   
+OC4J               | ssit-dsl           |   13747 | Alive   
+OC4J               | ssit-sfs           |   13750 | Alive   
+OC4J               | ssit-sistim        |   13753 | Alive   
+OC4J               | ssit-urop          |   13754 | Alive   
+OC4J               | fws                |   13755 | Alive   
+OC4J               | grade20            |   13757 | Alive   
+OC4J               | mitid              |   13758 | Alive   
+OC4J               | ssit-wtw           |    6025 | Alive   
+OC4J               | graddental         |   13767 | Alive   
+OC4J               | grade20Ethnicity   |   13769 | Alive   
+OC4J               | ssit-subjeval      |    5934 | Alive   
+HTTP_Server        | HTTP_Server        |   13711 | Alive   
+DSA                | DSA                |     N/A | Down    
+

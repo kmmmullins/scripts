@@ -1,0 +1,72 @@
+#!/bin/bash
+#
+#  release for idd svn projects  (using svn.mit.edu repository) 
+#
+#
+#
+DATE=`date +%m%d%y`
+#echo $DATE
+DATEFMT="%H:%M:%S %m/%d/%Y"
+p=`pwd`
+d=`dirname $p`
+app=`basename $p`
+wappdir=`basename $d`
+export SVN_SSH="ssh -i /home/kmullins/private/sais.private -l isdasnap"
+
+
+#echo $p
+#Aecho $d
+
+echo "wappdir: $wappdir"
+echo "app: $app"
+
+#echo "Create release tag for $app in $wappdir"
+
+#if [ $wappdir == "webapps" ];
+if [ $wappdir == "kmullins" ];
+
+then
+
+info_cmd="svn info"
+
+#echo  `date +"${DATEFMT}" `   "Username:  "
+#read USERNAME
+#USERNAME=kmullins
+
+#REVCMD=`$info_cmd | grep Revision`
+#SVNREV=${REVCMD:10:5}
+#echo "*****  ${SVNREV} *****"
+
+#export TAGNAME="$app-$DATE-$SVNREV"
+export TAGNAME="$app-$DATE"
+
+#echo ${TAGNAME}
+
+
+copy_cmd="svn copy svn+ssh://svn.mit.edu/idd/release-test/trunk  svn+ssh://svn.mit.edu/idd/release-test/tags/$TAGNAME -m \"new-$app-release\" "
+list_cmd="svn list svn+ssh://svn.mit.edu/idd/release-test/tags/"
+
+echo "******** starting copy ***********"
+
+$copy_cmd
+
+echo "********* list **********"
+
+$list_cmd
+
+
+exit
+else
+
+echo "You must be in the application's directory in order to release it"
+echo "\" $app \": is NOT a valid application."
+exit
+
+fi
+
+
+
+
+
+
+

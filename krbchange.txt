@@ -1,0 +1,24 @@
+Everything here goes in .bashrc
+
+# Set a default prompt, to taste. the \033[0m\] part resets any existing color/bold settings.
+
+if [ "x" != "x${PS1}" ]; then
+  export PS1="\[\033[0m\][\u@\h]\W\$ “
+fi
+
+# Without $KRB5CCNAME set, kinit will choose something, and getting tickets will basically work, but we’d prefer to make sure it’s always set
+
+if [ "x" = "x${KRB5CCNAME}" ]; then
+  KRB5CCNAME='/tmp/tkt_${UID}.0'
+  export KRB5CCNAME
+fi
+
+alias kother='export KRBNULL=${KRB5CCNAME}; export KRB5CCNAME=/tmp/krb5cc_${UID}.other; export PS1=“\[\033[0m\]#\u@\h#\W\$ “'
+
+alias knorm='export KRB5CCNAME=${KRBNULL}; PS1="\[\033[0m\][\u@\h]\W\$ “'
+
+# Not needed on Athena, and the longer than normal tickets may not be right for you, but I generally get long-lasting null-instance tickets by running ‘renew’. I get root tickets by running kinit explicitly.
+
+function renew () { kinit -l 22h $USER ; }
+
+

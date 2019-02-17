@@ -1,0 +1,222 @@
+ssit-academic
+1
+Application:    common-userauthorization-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+2
+Application:    academic-expdown-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+3
+Application:    academic-bgr-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+4
+Application:    academic-regcntrllst-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+5
+Application:    academic-testscores-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+6
+Application:    academic-reg-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+7
+Application:    mitsis-web-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+8
+Application:    academic-camemail-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+9
+Application:    academic-teamarc-app
+Component Name: ssit-academic
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+ssit-degree-tracking
+1
+Application:    academic-dt-app
+Component Name: ssit-degree-tracking
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+ssit-dsl
+1
+Application:    dsl-adm-grad-app
+Component Name: ssit-dsl
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+2
+Application:    dsl-asa-app
+Component Name: ssit-dsl
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+3
+Application:    f5test-app
+Component Name: ssit-dsl
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+4
+Application:    pe-registration-web
+Component Name: ssit-dsl
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+ssit-sfs
+1
+Application:    sfs-espaf-app
+Component Name: ssit-sfs
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+2
+Application:    sfs-wga-app
+Component Name: ssit-sfs
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+ssit-sistim
+1
+Application:    sfs-sistim-app
+Component Name: ssit-sistim
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+ssit-urop
+1
+Application:    academic-urop
+Component Name: ssit-urop
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+fws
+1
+Application:    fws
+Component Name: fws
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+grade20
+1
+Application:    grade20
+Component Name: grade20
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+mitid
+1
+Application:    mitid
+Component Name: mitid
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+ssit-wtw
+1
+Application:    wtw
+Component Name: ssit-wtw
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+graddental
+1
+Application:    graddental
+Component Name: graddental
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+2
+Application:    delta-dental
+Component Name: graddental
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+grade20Ethnicity
+1
+Application:    grade20Ethnicity
+Component Name: grade20Ethnicity
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------
+ssit-subjeval
+1
+Application:    academic-subjeval-rpt
+Component Name: ssit-subjeval
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+2
+Application:    academic-subject-evaluation
+Component Name: ssit-subjeval
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+3
+Application:    academic-ose-reporting
+Component Name: ssit-subjeval
+Component Type: OC4J
+Instance:       test_app02.sea-app-1.mit.edu
+Cluster:        test_cluster01
+
+---------------

@@ -1,0 +1,47 @@
+#! /bin/bash 
+
+
+KRB5CCNAME=/tmp/krb5cc_1000
+KRB5CCNAMELOCAL=/tmp/krb5cc_1000-local
+KRB5CCNAMEROOT=/tmp/krb5cc_1000-root
+
+
+
+
+switchlocal () 
+{
+
+echo " in switch-local"
+cp ${KRB5CCNAME} ${KRB5CCNAMEROOT}
+
+kinit kmullins
+
+cp ${KRB5CCNAME} ${KRB5CCNAMELOCAL}
+
+}
+
+
+switchroot () 
+{
+
+echo " in switch-root"
+
+cp ${KRB5CCNAMEROOT}  ${KRB5CCNAME} 
+
+}
+
+case "$1"  in 
+'local') 
+echo " Case Local"
+switchlocal
+;;
+'root')   
+echo "Case root"
+switchroot
+;;
+
+*) echo "other ..."
+;;
+esac    
+
+

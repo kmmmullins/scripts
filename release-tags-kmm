@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+#  release for idd svn projects  (using svn.mit.edu repository) 
+#
+#
+#
+DATE=`date +%m%d%y%H%M%S`
+DATEFMT="%H:%M:%S %m/%d/%Y"
+DATEFMTLOG=`date +"${DATEFMT}"`
+LOGFILE=/home/inside/logs/release-logs
+
+p=`pwd`
+d=`dirname $p`
+app=`basename $p`
+wappdir=`basename $d`
+
+
+
+if [ $wappdir == "webapps" ];
+
+then
+
+KERBSTATUS=`klist 2>/dev/null | grep Default | wc -l`
+
+if [ $KERBSTATUS -lt 1 ]
+
+   then
+       echo  `date +"${DATEFMT}" `   "Username:  "
+       read USERNAME
+
+       echo  "${DATEFMTLOG}  Username: ${USERNAME} ran release-kmm and authenicated via a non-kerberos id for the $app application" >> $LOGFILE
+       echo "Authenticating to svn with NON-Kerb-id for $USERNAME  for the $app application \n"
+   else
+
+         KERBNAME=`klist 2>/dev/null | grep Default | awk '{print $3}' | awk -F"@" '{print $1}'`
+
+         echo  "              "
+         echo "Authenticating to svn with Kerb id $KERBNAME for the $app application "
+
+         USERNAME=$KERBNAME
+
+         echo  "${DATEFMTLOG}  Username: ${USERNAME} ran release-kmm and authenticated via kerberos id for the $app application " >> $LOGFILE
+
+   fi
+
+
+### SVN Commands ...
+
+export INFO_CMD="svn info"
+export REVCMD=`$INFO_CMD | grep Revision`
+export SVNREV=${REVCMD:10:5}
+export TAGNAME="$app-$SVNREV-$DATE"
+
+COPY_CMD="svn copy . svn+ssh://svn.mit.edu/idd/$app/tags/$TAGNAME -m \"new-tag-$TAGNAME\"  " 
+LIST_CMD="svn list svn+ssh://svn.mit.edu/idd/$app/tags/"
+
+
+###################################################################################################
+#
+#  Copy application to new tag
+#
+###################################################################################################
+
+echo " "
+echo "******* Copying $app to $TAGNAME ************"
+
+SVN_SSH="ssh -q -l  $USERNAME "  $COPY_CMD
+if [ $? -gt 0 ]; then
+        echo " "
+        echo "ERROR - Problem with $app copy to $TAGNAME and ${SVN_SSH}"
+        echo " "
+   else
+        echo " "
+        echo "Successfully copied  $app to  $TAGNAME "
+        echo " "
+        echo  "${DATEFMTLOG}  Username: ${USERNAME} executed this command ... $COPY_CMD " >> $LOGFILE
+fi
+
+
+###################################################################################################
+#
+#  Listing Application tags
+#
+###################################################################################################
+
+SVN_SSH="ssh -q -l  $USERNAME "  $LIST_CMD | grep $app
+if [ $? -gt 0 ]; then
+        echo " "
+        echo "ERROR - Problem with $app Tag List "
+        echo " "
+   else
+        echo " "
+        echo "Successfully listed tages for $app  "
+        echo " "
+        echo "Tagname for deployment to test or production is: $TAGNAME"
+        echo " "
+        echo  "${DATEFMTLOG}  Username: ${USERNAME} executed this command ... $LIST_CMD " >> $LOGFILE
+fi
+
+
+
+
+
+ 
+exit
+else
+
+    echo "You must be in the applications directory in order to release it"
+    echo " $app : is NOT a valid application."
+    exit
+
+fi
+
+
+
+
+
+
+

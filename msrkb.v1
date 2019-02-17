@@ -1,0 +1,50 @@
+#!/bin/bash
+
+KERBSTATUS=`klist 2>/dev/null | grep Default | wc -l`
+#echo "$KERBSTATUS"
+
+
+if [ $KERBSTATUS -lt 1 ]
+
+then
+ 
+  printf "\t\t*** Please kinit as your non-root user and try again \n"
+  exit
+              else
+         KERBNAME=`klist 2>/dev/null | grep Default | awk '{print $3}' | awk -F"@" '{print $1}'`
+
+         printf "                          \n"
+         printf "Using Kerb id $KERBNAME \n"
+#         printf "                          \n"
+         printf "+---------------------------------------------------------+\n"
+#         exit 7
+fi
+
+
+DATEFMT="%H:%M:%S %m/%d/%Y"
+
+if [ "$1" = "?" ] || [ "$#" = "0" ];
+then
+echo " "
+echo " syntax:  msr svn-command "
+echo " "  
+exit
+fi
+
+#echo  `date +"${DATEFMT}" `   "Username:  "
+
+USERNAME=$KERBNAME
+
+
+SVNCMD=$@
+
+
+#echo ""
+#echo $@
+#echo $*
+#echo !*
+
+#echo $SVNCMD
+#echo "SVN_SSH=\"ssh -q -l $USERNAME \" $SVNCMD "
+SVN_SSH="ssh -q -l  $USERNAME"  ${SVNCMD}
+

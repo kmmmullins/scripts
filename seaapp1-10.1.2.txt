@@ -1,0 +1,83 @@
+Application:    common-userauthorization-app
+Component Name: ssit-academic
+--
+Application:    academic-expdown-app
+Component Name: ssit-academic
+--
+Application:    academic-bgr-app
+Component Name: ssit-academic
+--
+Application:    academic-regcntrllst-app
+Component Name: ssit-academic
+--
+Application:    academic-testscores-app
+Component Name: ssit-academic
+--
+Application:    academic-reg-app
+Component Name: ssit-academic
+--
+Application:    mitsis-web-app
+Component Name: ssit-academic
+--
+Application:    academic-camemail-app
+Component Name: ssit-academic
+--
+Application:    academic-teamarc-app
+Component Name: ssit-academic
+--
+Application:    academic-dt-app
+Component Name: ssit-degree-tracking
+--
+Application:    dsl-adm-grad-app
+Component Name: ssit-dsl
+--
+Application:    dsl-asa-app
+Component Name: ssit-dsl
+--
+Application:    f5test-app
+Component Name: ssit-dsl
+--
+Application:    pe-registration-web
+Component Name: ssit-dsl
+--
+Application:    sfs-espaf-app
+Component Name: ssit-sfs
+--
+Application:    sfs-wga-app
+Component Name: ssit-sfs
+--
+Application:    sfs-sistim-app
+Component Name: ssit-sistim
+--
+Application:    academic-urop
+Component Name: ssit-urop
+--
+Application:    fws
+Component Name: fws
+--
+Application:    grade20
+Component Name: grade20
+--
+Application:    mitid
+Component Name: mitid
+--
+Application:    wtw
+Component Name: ssit-wtw
+--
+Application:    graddental
+Component Name: graddental
+--
+Application:    delta-dental
+Component Name: graddental
+--
+Application:    grade20Ethnicity
+Component Name: grade20Ethnicity
+--
+Application:    academic-subjeval-rpt
+Component Name: ssit-subjeval
+--
+Application:    academic-subject-evaluation
+Component Name: ssit-subjeval
+--
+Application:    academic-ose-reporting
+Component Name: ssit-subjeval

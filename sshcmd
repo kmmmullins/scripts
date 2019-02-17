@@ -1,0 +1,33 @@
+#!/bin/bash 
+#
+#  MSR  MIT Source Repository
+#
+#  wrapper for SVN commands to svn.mit.edu
+#  to simplify the svn+ssh syntax  
+#
+
+DATEFMT="%H:%M:%S %m/%d/%Y"
+
+
+if [ "$1" = "?" ] || [ "$#" = "0" ]; 
+then
+echo " "
+echo " syntax:  sshcmd nodename command "
+echo " "  
+exit  
+fi
+
+NODE=$1
+FULLCMD=$@
+COMMAND=`echo $@ | sed s/$1/' '/g`
+
+#echo ""
+#echo "all .... $@"
+#echo " first $1"
+
+echo " "
+echo "------------ Running on node $1 --------------"
+echo " "
+SSHCMD="ssh  root@$1  ${COMMAND} "
+
+$SSHCMD

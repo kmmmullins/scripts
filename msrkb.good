@@ -1,0 +1,46 @@
+#!/bin/bash
+
+DATEFMT="%H:%M:%S %m/%d/%Y"
+DATE=`date +"${DATEFMT}" `
+LOGFILE=/home/inside/logs/release-log
+KERBSTATUS=`klist 2>/dev/null | grep Default | wc -l`
+#echo "$KERBSTATUS"
+
+if [ $KERBSTATUS -lt 1 ]
+
+then
+       echo  `date +"${DATEFMT}" `   "Username:  "
+       read USERNAME
+
+#       echo  "${DATE}  Username: ${USERNAME} authenticated via a non-kerberos id - msr " >> $LOGFILE
+ 
+   else
+         KERBNAME=`klist 2>/dev/null | grep Default | awk '{print $3}' | awk -F"@" '{print $1}'`
+
+         echo  "          "
+         echo  "Authenticating with Kerb id $KERBNAME "
+         echo  "+---------------------------------------------------------+"
+
+         USERNAME=$KERBNAME
+
+#       echo  "${DATE}  Username: ${USERNAME} ran msr and authenticated via kerberos id " >> $LOGFILE
+fi
+
+
+if [ "$1" = "?" ] || [ "$#" = "0" ];
+then
+echo " "
+echo " syntax:  msrkb svn-command "
+echo " "  
+exit
+fi
+
+
+SVNCMD=$@
+
+echo $SVNCMD 
+echo " "
+
+SVN_SSH="ssh -q -l  $USERNAME"  ${SVNCMD}
+
+#       echo  "${DATE}  Username: ${USERNAME} ran msr and this command ... $SVNCMD" >> $LOGFILE

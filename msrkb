@@ -1,0 +1,41 @@
+#!/bin/bash
+
+DATEFMT="%H:%M:%S %m/%d/%Y"
+
+KERBSTATUS=`klist 2>/dev/null | grep Default | wc -l`
+#echo "$KERBSTATUS"
+
+if [ $KERBSTATUS -lt 1 ]
+
+then
+       echo  `date +"${DATEFMT}" `   "Username:  "
+       read USERNAME
+
+ 
+   else
+         KERBNAME=`klist 2>/dev/null | grep Default | awk '{print $3}' | awk -F"@" '{print $1}'`
+
+         printf "                          \n"
+         printf "Authenticating with Kerb id $KERBNAME \n"
+         printf "+---------------------------------------------------------+\n"
+
+         USERNAME=$KERBNAME
+
+fi
+
+
+if [ "$1" = "?" ] || [ "$#" = "0" ];
+then
+echo " "
+echo " syntax:  msrkb svn-command "
+echo " "  
+exit
+fi
+
+
+SVNCMD=$@
+
+echo $SVNCMD
+
+SVN_SSH="ssh -q -l  $USERNAME"  ${SVNCMD}
+

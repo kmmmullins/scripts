@@ -1,0 +1,216 @@
+#!/bin/bash
+#
+#  app-deploy for idd svn projects  (using svn.mit.edu repository) 
+#
+#
+#
+DATE=`date +%m%d%y%H%M%S`
+DATEFMT="%H:%M:%S %m/%d/%Y"
+DATEFMTLOG=`date +"${DATEFMT}"`
+LOGFILE=/home/inside/logs/release-log
+TAGNAME=$1
+STRINGPOS=0
+DASHPOS=0
+APPDASHES=0
+HOSTNAME=`hostname`
+SECONDARYHOSTNAME="sea-app-22"
+### SVN Commands ...
+INFO_CMD="svn info"
+REVCMD=`$INFO_CMD | grep Revision`
+SVNREV=${REVCMD:10:5}
+STATUS_CMD="svn status -u"
+UPDATE_CMD="svn update"
+SWITCH_CMD="svn switch svn+ssh://svn.mit.edu/idd/$APPNAME/tags/$TAGNAME "
+
+p=`pwd`
+d=`dirname $p`
+app=`basename $p`
+wappdir=`basename $d`
+
+##########################################################
+#
+#  Check command line
+#
+#########################################################
+
+if [ $# -lt 1 ]
+then 
+
+   echo " "
+   echo " ERROR on the command line - no tag name"
+   echo " "
+   echo " Usage app-deploy.sh <Tag Name>"
+   echo " "
+   exit
+else
+
+ NUMDASHES=`echo $TAGNAME | grep -o "-" | wc -l`
+ DASHES=`expr $NUMDASHES - 1 `
+
+ for (( i=0; i<${#TAGNAME}; i++ )); do
+   STRINGPOS=`expr $STRINGPOS + 1`
+   STRINGVALUE=${TAGNAME:$i:1}
+#   echo " stringpos = $STRINGPOS"
+#   echo " stringvalue = $STRINGVALUE"
+
+   if [ $STRINGVALUE == "-"  ]
+   then
+       APPDASHES=`expr $APPDASHES + 1`
+       if [ $APPDASHES == $DASHES ]
+       then
+
+#           echo "stringvalue = $STRINGVALUE and stringpos = $STRINGPOS "
+            PULLPOS=`expr $STRINGPOS - 1`
+#            echo "pullpos = $PULLPOS" 
+#           echo " ${TAGNAME:0:$PULLPOS}"
+            export APPNAME="${TAGNAME:0:$PULLPOS}"
+           echo "Application name is $APPNAME"
+       fi
+   fi
+ done
+fi
+
+##########################################################
+#
+#  If Kerb is in place then use it
+#
+#########################################################
+
+KERBSTATUS=`klist 2>/dev/null | grep Default | wc -l`
+
+if [ $KERBSTATUS -lt 1 ]
+
+   then
+       echo  `date +"${DATEFMT}" `   "Username:  "
+       read USERNAME
+
+#       echo  "${DATEFMTLOG}  Username: ${USERNAME} ran release-kmm and authenicated via a non-kerberos id for the $app application" >> $LOGFILE
+       echo "Authenticating to svn with NON-Kerb-id for $USERNAME  for the $app application \n"
+   else
+
+         KERBNAME=`klist 2>/dev/null | grep Default | awk '{print $3}' | awk -F"@" '{print $1}'`
+
+#         echo  "              "
+#         echo "app-deploy deployment of $1 authenticating to svn with Kerb id $KERBNAME for the $app application "
+
+         USERNAME=$KERBNAME
+
+         echo  "${DATEFMTLOG}  Username: ${USERNAME} app-deploy authenticated via kerberos id for the $app application " >> $LOGFILE
+
+   fi
+
+##########################################################
+#
+#  Check location
+#
+#########################################################
+
+
+if [ -d /home/inside/webapps/${APPNAME} ] 
+then 
+
+#       echo "Found /home/inside/webapps/${APPNAME}"
+    cd /home/inside/webapps/${APPNAME}
+    if [ $? -gt 0 ]; then
+        echo " "
+        echo "ERROR - Moving to /home/inside/webapps/${APPNAME} "
+        echo " "
+    else
+        echo "$APPNAME on $HOSTNAME"
+#        echo "Successfully moved to /home/inside/webapps/${APPNAME} "
+        echo " "
+    fi
+
+else
+   echo "problem with /home/inside/webapps/${APPNAME}"
+   exit
+fi
+
+
+###################################################################################################
+#
+#  Check the status of the directory
+#
+###################################################################################################
+### SVN Commands ...
+INFO_CMD="svn info"
+REVCMD=`$INFO_CMD | grep Revision`
+SVNREV=${REVCMD:10:5}
+STATUS_CMD="svn status -u"
+UPDATE_CMD="svn update"
+SWITCH_CMD="svn switch svn+ssh://svn.mit.edu/idd/$APPNAME/tags/$TAGNAME "
+
+#echo "******* Checking status of $app ... ${STATUS_CMD} ************"
+
+SVN_SSH="ssh -q -l  $USERNAME "  $STATUS_CMD | awk '{print $1}' | grep "C" 
+if [ $? -lt 1 ]; then
+
+        echo " "
+        echo "ERROR - Conflict in svn repo for $APPNAME  .... ${STATUS_CMD}"
+        echo " "
+        exit
+   else
+#       echo " "
+        echo "No conflicts in $APPNAME working directory"
+        echo " "
+#        echo  "${DATEFMTLOG}  Username: ${USERNAME} executed this command ... ${STATUS_CMD} " >> $LOGFILE
+fi
+
+###################################################################################################
+#
+#  Switch svn working directory to new tagged version
+#
+###################################################################################################
+
+SVN_SSH="ssh -q -l  $USERNAME "  $SWITCH_CMD 
+if [ $? -gt 0 ]; then
+        echo " "
+        echo "ERROR - Problem with $app Tag List "
+        echo " "
+   else
+        echo " "
+        echo "Successfully switched working directory for $APPNAME to $TAGNAME on sea-app-21"
+        echo " "
+#        echo  "${DATEFMTLOG}  Username: ${USERNAME} executed this command ... $LIST_CMD " >> $LOGFILE
+fi
+
+
+###################################################################################################
+#
+#  Do another svn update after the switch
+#
+###################################################################################################
+SVN_SSH="ssh -q -l  $USERNAME"  ${UPDATE_CMD}
+if [ $? -ne 0 ] 
+then
+  echo "problem with svn update"
+  exit
+fi
+############################################
+#
+# Ant deploy
+#
+############################################
+
+if [ ${HOSTNAME} = "sea-app-22.MIT.EDU" ] 
+then
+  echo "Do not deploy app from sea-app-22"
+else
+  echo " "
+  echo "Starting Build .............."
+  echo " "
+  ant deploy
+  if [ $? -ne 0 ] 
+  then
+      echo "problem with ant deploy"
+      exit
+  fi
+
+fi
+
+
+echo "The new deployment of ${APPNAME} was deployed on ${HOSTNAME} " | mail -s "Deployed ${APPNAME} on ${HOSTNAME}" adm-deploy@mit.edu 
+
+
+
+

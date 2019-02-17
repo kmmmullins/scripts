@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export PS1='\u:\h> '
+alias ksiz='du -sk * | sort -n --'
+alias bash='clear;/bin/bash -l'
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias mkdir='mkdir -p'
+
+

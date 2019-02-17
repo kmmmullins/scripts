@@ -1,0 +1,18 @@
+ chmod 600 i2b2key.pem 
+ ssh -i /home/kmullins/secret/i2b2key.pem root@184.73.215.50  #Proxy to Production Confluence
+ ssh -i /home/kmullins/secret/i2b2key.pem ec2-user@52.201.221.251  #Production Confluence
+ ssh -i /home/kmullins/secret/i2b2key.pem ec2-user@52.91.118.56 # New Confluence
+ 
+
+
+
+
+ssh -i /home/kmullins/secret/i2b2key.pem ec2-user@52.7.224.194  #kavi -fire
+ssh -i /home/kmullins/secret/i2b2key.pem root@52.7.224.194      #kavi - fire
+
+
+ ssh -i /home/kmullins/secret/i2b2key.pem ec2-user@107.20.249.75
+
+ssh -i /home/kmullins/secret/devappkmm.pem ec2-54-237-243-111.compute-1.amazonaws.com
+
+ec2-54-175-229-195.compute-1.amazonaws.com

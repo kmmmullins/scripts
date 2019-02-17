@@ -1,0 +1,32 @@
+#!/bin/bash
+
+cd ~
+rm -rf vmware-modules
+mkdir vmware-modules
+cd vmware-modules
+find /usr/lib/vmware/modules/source -name "*.tar" -exec tar xf '{}' \;
+mkdir -p /lib/modules/`uname -r`/misc
+rm -f /lib/modules/`uname -r`/misc{vmblock.ko,vmci.ko,vmmon.ko,vmnet.ko,vsock.ko}
+rm -f /lib/modules/`uname -r`/misc{vmblock.o,vmci.o,vmmon.o,vmnet.o,vsock.o}
+cd vmblock-only; make; cd ..
+cd vmci-only; make; cd ..
+cd vmmon-only; make; cd ..
+cd vmnet-only; make; cd ..
+#cd vmppuser-only; make; cd ..
+cd vsock-only; make; cd ..
+
+cp *.o /lib/modules/`uname -r`/misc/.
+cd /lib/modules/`uname -r`/misc/
+
+ln -s vmblock.o vmblock.ko
+ln -s vmci.o vmci.ko
+ln -s vmnet.o vmnet.ko
+ln -s vmmon.o vmmon.ko
+#ln -s vmppuser.o vmppuser.ko
+ln -s vsock.o vsock.ko
+
+depmod -a
+service vmware restart
+
+cd ~
+rm -rf vmware-modules

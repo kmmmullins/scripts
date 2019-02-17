@@ -1,0 +1,56 @@
+#! /usr/bin/perl
+#-----------------------------------------------#
+# File: process_list.pl                         #
+# Auth: Kevin Mullins                           #
+# Date: 02/06/08                                #
+# Desc: Simple script to monitor system loads   #
+#       and capture top processes running.      # 
+#       Script is intended to be run from cron. #
+#-----------------------------------------------#       
+
+#-------------------------------------------------------------#
+# Check to see if any previous loadwatch scripts are running. #
+#-------------------------------------------------------------#
+#sleep 5;                          # Brief wait for file close #
+#open (LOG, "ps x|");
+#while () {
+#   if (/loadwatch stats/) {       # Already running - exit #
+#     exit;
+#   }
+#}
+#close (LOG);
+
+#-----------------------------------------------------------------#
+# OK to continue - write current PID to a file and capture stats. #
+#-----------------------------------------------------------------#
+#(undef,undef,undef,$mday,$mon,$year) = localtime(time);
+#$rmon = $mon + 1;
+
+my $DATE = localtime time;
+chomp($DATE);
+my $now = `date +%Y%m%d%H%M%S`;
+my $htp = `ps -ef | grep http | wc -l`;
+chomp($htp);
+my $oasp = `ps -ef | grep oasprod | wc -l`;
+chomp($oasp);
+
+
+        print "It is now $now\n";
+        print "Date = $DATE\n";
+        print "Total number of http processes = $htp \n";
+        print "Total number of oasprod processes = $oasp \n";
+        
+        print "$DATE http: $htp  OAS: $oasp \n";
+
+
+
+$0 = "loadwatch stats";          # Simplify process table lookups #
+
+open (LOG, ">>/home/kmullins/logs/loadwatch.log");
+print LOG "\n+-------------------------------------------" .
+          "-------------------------------------------+\n\n";
+print LOG "Interval: " . `uptime` . "\n"; 
+print LOG "Top Processes:\n";      
+print LOG `ps -ef `;
+close (LOG);
+

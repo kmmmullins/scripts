@@ -1,0 +1,37 @@
+#!/bin/bash 
+#
+#  MSR  MIT Source Repository
+#
+#  wrapper for SVN commands to svn.mit.edu
+#  to simplify the svn+ssh syntax  
+#
+
+DATEFMT="%H:%M:%S %m/%d/%Y"
+
+
+if [ "$1" = "?" ] || [ "$#" = "0" ]; 
+then
+echo " "
+echo " syntax:  msr svn-command "
+echo " "  
+exit  
+fi
+
+echo  `date +"${DATEFMT}" `   "Username:  "
+
+read USERNAME
+
+
+SVNCMD=$@
+
+
+#echo ""
+#echo $@
+#echo $*
+#echo !*
+
+echo $SVNCMD
+#echo "SVN_SSH=\"ssh -q -l $USERNAME \" $SVNCMD "
+SVN_SSH="ssh -q -l  $USERNAME"  ${SVNCMD}
+
+
