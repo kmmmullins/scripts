@@ -22,3 +22,4 @@ ssh root@$node $@
 #ssh root@$node "grep ERROR /oracle/logs/ssit-urop_default_island_1/urop.out.log | grep `date +%F`"
 echo "---------------"
 done
+#KMM February 2, 2020
