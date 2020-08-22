@@ -12,4 +12,5 @@ do
 echo $node;
 ssh root@$node 'uptime';
 ssh root@$node 'free ';
+echo $node;
 done
